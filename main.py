@@ -15,24 +15,31 @@ class MainWidget(QMainWindow):
     # initialization
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui forms/UI.ui', self)
-        self.setWindowTitle('rounds')
-        self.pushButton.connect(self.a)
+        self.pushButton.setFixedSize(100, 100)
+        self.pushButton.clicked.connect(self.circle)
+
+        self.label = QLabel()
         canvas = QPixmap(600, 600)
         self.label.setPixmap(canvas)
-        self.show()
 
-    def a(self):
+        layout = QGridLayout(self.centralwidget)
+        layout.addWidget(self.pushButton, 0, 0, alignment=Qt.AlignCenter)
+        layout.addWidget(self.label, 1, 0)
+
+    def circle(self):
         x, y = [randint(10, 500) for i in range(2)]
         w, h = [randint(10, 100) for i in range(2)]
+        # создаем экземпляр QPainter, передавая холст (self.label.pixmap())
         painter = QPainter(self.label.pixmap())
         pen = QPen()
         pen.setWidth(3)
-        pen.setColor(yellow)
+        a = QColor(*[randint(0, 255) for i in range(3)])
+        pen.setColor(a)
         painter.setPen(pen)
-        painter.drawEllipse(x, y, w, h)
+        painter.drawEllipse((x, y, w, h), fill=a)
         painter.end()
         self.update()
+
 
 app = QApplication(sys.argv)
 ex = MainWidget()
